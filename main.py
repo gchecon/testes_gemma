@@ -58,6 +58,10 @@ for doc in docs:
     chunk_embedding = embeddings.encode(doc)
     chunk_embeddings.append(chunk_embedding)
 
+# https://upstash.com/docs/redis/overall/getstarted
+# https://www.youtube.com/watch?v=lK2DmL7t5R8
+# https://upstash.com/
+
 UPSTASH_VECTOR_REST_URL="<YOUR_UPSTASH_VECTOR_REST_URL>"
 UPSTASH_VECTOR_REST_TOKEN="<YOUR_UPSTASH_VECTOR_REST_TOKEN>"
 
@@ -66,8 +70,8 @@ vectors = []
 # generate the vectors in batches of 10
 batch_count = 10
 
-for i in trange(0, len(chunks), batch_count):
-    batch = chunks[i:i+batch_count]
+for i in trange(0, len(chunks), batch_count):   # Analisar a falta de referência
+    batch = chunks[i:i+batch_count]             # Analisar a falta de referência
 
     embeddings = chunk_embedding[batch]
 
