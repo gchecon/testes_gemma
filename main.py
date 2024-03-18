@@ -40,7 +40,7 @@ data = data.to_pandas()
 data.to_csv("stanford_dataset.csv")
 data.head()
 
-loader = CSVLoader(file_path='./stanford_dataset.csv')
+loader = CSVLoader(file_path='./stanford_dataset.csv', encoding='utf-8')
 data = loader.load()
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150)
