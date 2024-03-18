@@ -29,6 +29,10 @@ def ask_question(question):
     # Return the generated answer
     return answer[0]['generated_text']
 
+'''
+Neste ponto do programa foi utilizado a biblioteca Cosmopedia. Avaliar o uso de
+Arquivos próprios para aprimorar o uso do RAG 
+'''
 
 data = load_dataset("HuggingFaceTB/cosmopedia", "stanford", split="train")
 
@@ -41,6 +45,10 @@ data = loader.load()
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150)
 docs = text_splitter.split_documents(data)
+
+'''
+Aqui é usado o modelo all-MiniLM-l6-v4. Avaliar a utilização de outros modelos
+'''
 
 modelPath = "sentence-transformers/all-MiniLM-l6-v2"
 model_kwargs = {'device':'cpu'}
@@ -62,24 +70,28 @@ for doc in docs:
 # https://www.youtube.com/watch?v=lK2DmL7t5R8
 # https://upstash.com/
 
-UPSTASH_VECTOR_REST_URL="<YOUR_UPSTASH_VECTOR_REST_URL>"
-UPSTASH_VECTOR_REST_TOKEN="<YOUR_UPSTASH_VECTOR_REST_TOKEN>"
+'''
+Nesta parte do código é utilizado o vector database Upstash
+Avaliar o uso do PostgreSQL
+'''
+
+UPSTASH_VECTOR_REST_URL="https://precise-kangaroo-41875.upstash.io"
+UPSTASH_VECTOR_REST_TOKEN="AaOTACQgNzlkNmIyM2UtZDUyYS00NDQwLWJiMzEtZGJjZThlMjBkZWJhNmNkY2Q3ZDNhNzI2NDBhMjlhM2RkMmRjZGFiYzk1MTk="
 
 vectors = []
 
 # generate the vectors in batches of 10
 batch_count = 10
 
-for i in trange(0, len(chunks), batch_count):   # Analisar a falta de referência
-    batch = chunks[i:i+batch_count]             # Analisar a falta de referência
+# correção do texto original -> chunks para docs
 
-    embeddings = chunk_embedding[batch]
-
+for idx in trange(0, len(docs), batch_count):  # Usar 'idx' ao invés de 'i' para o loop externo
+    batch = docs[idx:idx+batch_count]
+    # A linha abaixo precisa ser corrigida para algo que faça sentido, como gerar embeddings para 'batch'
+    # embeddings = chunk_embedding[batch]  # Esta linha parece incorreta conforme a explicação anterior.
     for i, chunk in enumerate(batch):
-        vec = Vector(id=f"chunk-{i}", vector=embeddings[i], metadata={
-            "text": chunk
-        })
-
+        # Supondo que 'embeddings' seja uma lista de vetores de embeddings gerados para cada 'chunk' no 'batch'
+        vec = Vector(id=f"chunk-{idx+i}", vector=embeddings[i], metadata={"text": chunk})
         vectors.append(vec)
 
 index = Index(
